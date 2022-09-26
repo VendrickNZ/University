@@ -24,15 +24,17 @@ def joint_prob(network, assignment):
 def query(network, query_var, evidence):
     
     # If you wish you can follow this template
-    hidden_vars = network.keys() - evidence.keys() - {query_var}
     # Find the hidden variables
+    hidden_vars = network.keys() - evidence.keys() - {query_var}
+    raw_dist = [0, 0]
     # Initialise a raw distribution to [0, 0]
     assignment = dict(evidence) # create a partial assignment
     for query_value in {True, False}:
         # Update the assignment to include the query variable
+        assignment.update(query_value)
         for values in product((True, False), repeat=len(hidden_vars)):
                 hidden_assignments = {var:val for var,val in zip(hidden_vars, values)}
-                hidden_assignments
+                assignment.update(values)
             # Update the assignment (we now have a complete assignment)
             # Update the raw distribution by the probability of the assignment.
     # Normalise the raw distribution and return it
