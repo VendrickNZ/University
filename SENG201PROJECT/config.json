@@ -1,0 +1,8 @@
+{
+  "num_islands": 4,
+  "use_unicode": false,
+  "avg_vendor_stock": 5,
+  "wage_cost_per_distance": 1.5,
+  "max_events": 2,
+  "vendor_max_items_per_page": 10
+}

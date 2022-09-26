@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <stdint.h>
+
+uint8_t intLog2(uint32_t value)
+{
+    uint32_t i = 0;
+    while (value > 1)  {
+        value /= 2;
+        i++;
+    }
+    return i;
+}
+
+
+int main()
+{
+    char c;
+    printf("Enter a chracter\n");
+    do  {
+        c = getchar();
+        printf("\nWe have entered the character: ");
+        putchar(c);
+        printf("\n");
+    }   while (c != 'q');
+    return 0;
+}

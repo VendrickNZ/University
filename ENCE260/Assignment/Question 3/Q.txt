@@ -1,0 +1,14 @@
+Write a function that takes user input e.g. "123321" and returns the value.
+
+The user input may have a prefix that needs to be dealt with accordingly.
+
+Any non-legitimate symbols such as spaces, new lines or EOF terminates the value.
+
+The function returns the value up until the non-legitimate symbol.
+
+If the value is equal to or greater than the max possible value, you return 
+the max possible value. (65535)
+
+If the value starts with a non-legitimate symbol, you return -0.
+
+set size max 6 characters

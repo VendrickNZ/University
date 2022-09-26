@@ -1,0 +1,6 @@
+if statement check if there is an else token
+if so consume it and return the new function i made i presume
+give it new else statement
+
+class needs new parameter for the else statement
+

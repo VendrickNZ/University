@@ -1,0 +1,12 @@
+firstnum := 6;
+secondnum := 3;
+vendrickbestad := 0;
+read num;
+write num;
+if 3 != 5 then
+  num := 5*8/9;
+  vendrickbestad := firstnum/secondnum
+end;
+
+write vendrickbestad;
+write num

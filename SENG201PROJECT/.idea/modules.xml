@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/SENG201 PROJECT.iml" filepath="$PROJECT_DIR$/.idea/SENG201 PROJECT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/seng201-21s1-group-8/seng201-21s1-group-8.iml" filepath="$PROJECT_DIR$/seng201-21s1-group-8/seng201-21s1-group-8.iml" />
+    </modules>
+  </component>
+</project>

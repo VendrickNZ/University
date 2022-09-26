@@ -1,0 +1,3 @@
+institution: University of Canterbury
+year: 2019
+max_num_courses: 200

@@ -1,0 +1,1 @@
+swap12([Y, X|Tail], [X, Y|Tail]).
