@@ -30,7 +30,10 @@ struct Vector {
 // memset, sizeof
 //
 struct Vector *new_vector(int n) {
-    // TODO: Implement me
+    struct Vector *v = malloc(sizeof(struct Vector));
+    v->size = n;
+    v->data = calloc(sizeof(double), v->size);
+    return v;
 }
 
 
@@ -53,8 +56,12 @@ struct Vector *new_from(double *data, int n) {
 //
 struct Vector *add_vectors(struct Vector *v1, struct Vector *v2) {
     assert(v1->size == v2->size);
-
-    // TODO: Implement me
+    struct Vector *newVector = new_from(v1->data, v1->size);
+    for (size_t i = 0; i < sizeof(v1); i++)
+    {
+        newVector->data[i] += v2->data[i];
+    }
+    return newVector;
 }
 
 
@@ -87,8 +94,8 @@ int main() {
     print_vector(y);
 
 
-    //   struct Vector *r = add_vectors(x, y);
-    //   print_vector(r);
+      struct Vector *r = add_vectors(x, y);
+      print_vector(r);
 
       // Expected output: 
       // <1.43, 2.00, 3.50, 4.00>

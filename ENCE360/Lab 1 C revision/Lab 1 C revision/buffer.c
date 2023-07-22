@@ -34,16 +34,11 @@ typedef struct BufferStruct {
 // into the new buffer and return it.
 //
 Buffer *copy_buffer(Buffer *buffer) {
-
-    // TODO: Implement me
-    // Functions you may need include:
-    //
-    // malloc (twice, one for the struct and one for the data)
-    // memset 
-
-    // Check these using man pages. e.g. 'man malloc'
-    //
-
+    Buffer *b = malloc(sizeof(struct BufferStruct));
+    b->size = buffer->size;
+    b->data = malloc(b->size * sizeof(char));
+    memcpy(b->data, buffer->data, b->size);
+    return b;
 }
 
 // Example buffer with normal strings
