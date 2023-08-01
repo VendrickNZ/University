@@ -34,7 +34,7 @@ int run_threads(int n) {
     for (int i = 0; i < n; ++i)
     {
       address[i] = i;
-      pthread_create(&threads[i], NULL, runMeAdapter, (void*)&address[i]);
+      pthread_create(&threads[i], NULL, (void* (*)(void*))runMe, (void*)&address[i]);
     }
 
 
@@ -59,8 +59,6 @@ int main (int argc, char **argv) {
   for(int i = 0; i < 5; ++i) {
     if(has_run[i]) correct++;
   }
-
-  printf("%d %d", correct, sum);
 
   return 0;
 }
