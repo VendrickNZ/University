@@ -10,7 +10,6 @@
 
 typedef double MathFunc_t(double);
 
-
 double gaussian(double x)
 {
 	return exp(-(x*x)/2) / (sqrt(2 * M_PI));
@@ -29,9 +28,9 @@ double chargeDecay(double x)
 }
 
 #define NUM_FUNCS 3
+#define MAX_CHILDREN 6
+
 static MathFunc_t* const FUNCS[NUM_FUNCS] = {&sin, &gaussian, &chargeDecay};
-
-
 
 
 
