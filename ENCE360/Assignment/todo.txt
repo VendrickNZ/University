@@ -1,0 +1,9 @@
+process.c
+
+* Run integrateTrap() inside a child process
+
+* Parent process reprompts for input
+
+* If number of children already at maximum, it should not prompt for input until 
+one of the children finishes (use signals)
+
