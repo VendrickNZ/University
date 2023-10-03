@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
         random_vec(rand_nums, total_elems);
     }
 
-    printf("initialized: rank %d of %d\n", world_rank, world_size);
+    printf("\ninitialized: rank %d of %d\n", world_rank, world_size);
 
     // Start the clock
     struct timespec start, stop;

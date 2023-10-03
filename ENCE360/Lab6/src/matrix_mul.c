@@ -87,28 +87,29 @@ int min(int a, int b) {
 //
 
 void matrix_mul_blocked(double *res, double *a, double *b, int n, int block) {
+    int i, j, k;
+    int ii, jj, kk;
 
+    zero_matrix(res, n);
 
-  int i, j, k;
-  int ii, jj, kk;
-  
-  zero_matrix(res, n);
-  
-  // loop over outer blocks 
-  for (i = 0; i < n; i += block) {
-    for (j = 0; j < n; j += block) { 
-      for (k = 0; k < n; k += block) {
-        
-        int i_end = min(i + block, n);
-        int j_end = min(j + block, n);
-        int k_end = min(k + block, n);
-        
-        // loop over inner block
-        
-        //TODO: finish blocked matrix implementation
-      }
+    // loop over outer blocks 
+    for (i = 0; i < n; i += block) {
+        for (j = 0; j < n; j += block) { 
+            for (k = 0; k < n; k += block) {
+
+                int i_end = min(i + block, n);
+                int j_end = min(j + block, n);
+                int k_end = min(k + block, n);
+
+                // loop over inner block
+                for (ii = i; ii < i_end; ++ii) {
+                    for (jj = j; jj < j_end; ++jj) {
+                        for (kk = k; kk < k_end; ++kk) {
+                            res[ii * n + jj] += a[ii * n + kk] * b[kk * n + jj];
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
-  
-  
 }

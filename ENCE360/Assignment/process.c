@@ -3,18 +3,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <signal.h>
 
 #ifndef M_PI
     #define M_PI 3.14159265358979323846
 #endif
 
 typedef double MathFunc_t(double);
+void waitChild();
 
 double gaussian(double x)
 {
 	return exp(-(x*x)/2) / (sqrt(2 * M_PI));
 }
-
 
 double chargeDecay(double x)
 {
@@ -31,8 +35,7 @@ double chargeDecay(double x)
 #define MAX_CHILDREN 6
 
 static MathFunc_t* const FUNCS[NUM_FUNCS] = {&sin, &gaussian, &chargeDecay};
-
-
+static int numChildren = 0;
 
 //Integrate using the trapezoid method. 
 double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_t numSteps)
@@ -51,9 +54,6 @@ double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_
 	return area;
 }
 
-
-
-
 bool getValidInput(double* start, double* end, size_t* numSteps, size_t* funcId)
 {
 	printf("Query: [start] [end] [numSteps] [funcId]\n");
@@ -65,7 +65,10 @@ bool getValidInput(double* start, double* end, size_t* numSteps, size_t* funcId)
 	return (numRead == 4 && *end >= *start && *numSteps > 0 && *funcId < NUM_FUNCS);
 }
 
-
+void waitChild() {
+	wait(NULL);
+	numChildren--;
+}
 
 int main(void)
 {
@@ -73,11 +76,28 @@ int main(void)
 	double rangeEnd;
 	size_t numSteps;
 	size_t funcId;
+	pid_t child_pid = 0;
 
+	signal(SIGCHLD, &waitChild);
+	
 	while (getValidInput(&rangeStart, &rangeEnd, &numSteps, &funcId)) {
-		double area = integrateTrap(FUNCS[funcId], rangeStart, rangeEnd, numSteps);
+		
+		numChildren++;
 
-		printf("The integral of function %zu in range %g to %g is %.10g\n", funcId, rangeStart, rangeEnd, area);
+		printf("Number of children: %d\n", numChildren);
+
+		if ((child_pid = fork()) < 0) {
+			perror("fork");
+			exit(1);
+		}
+		else if (child_pid == 0) {
+			double area = integrateTrap(FUNCS[funcId], rangeStart, rangeEnd, numSteps);
+			printf("The integral of function %zu in range %g to %g is %.10g\n", funcId, rangeStart, rangeEnd, area);
+		}
+
+		while (numChildren == MAX_CHILDREN) {
+			wait(NULL);
+		}
 	}
 
 	exit(0);

@@ -1,5 +1,3 @@
-
-
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,11 +22,23 @@ int main(int argc, char** argv) {
 
     //Send off the first message around the ring
     if (world_rank == 0) {
+        printf("\n%d: sending value %d to process %d\n", world_rank, value, dest);
+        MPI_Send(&value, 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
+    } else {
+        // Receive, increment, and send the value
+        MPI_Recv(&value, 1, MPI_INT, src, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("%d: received value %d from process %d\n", world_rank, value, src);
+        value++;
         printf("%d: sending value %d to process %d\n", world_rank, value, dest);
         MPI_Send(&value, 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
     }
 
-    //TODO: Implement me
+    // Process 0 receives the final value
+    if (world_rank == 0) {
+        MPI_Recv(&value, 1, MPI_INT, src, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("%d: received value %d from process %d\n", world_rank, value, src);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
 
     // Cleanup
     MPI_Finalize();
