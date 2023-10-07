@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
+#include <pthread.h>
 
 #ifndef M_PI
     #define M_PI 3.14159265358979323846
@@ -36,27 +37,28 @@ double chargeDecay(double x)
 
 static MathFunc_t* const FUNCS[NUM_FUNCS] = {&sin, &gaussian, &chargeDecay};
 static int numChildren = 0;
+pthread_mutex_t numChildrenMutex = PTHREAD_MUTEX_INITIALIZER;
 
 //Integrate using the trapezoid method. 
 double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_t numSteps)
 {
 	double rangeSize = rangeEnd - rangeStart;
 	double dx = rangeSize / numSteps;
-
 	double area = 0;
 	for (size_t i = 0; i < numSteps; i++) {
 		double smallx = rangeStart + i*dx;
 		double bigx = rangeStart + (i+1)*dx;
 
-		area += dx * ( func(smallx) + func(bigx) ) / 2; //Would be more efficient to multiply area by dx once at the end. 
+		// added optimization by multiplying by dx (and 0.5) outside of for loop
+		area += ( func(smallx) + func(bigx) );
 	}
 
-	return area;
+	return area * dx * 0.5;
 }
 
 bool getValidInput(double* start, double* end, size_t* numSteps, size_t* funcId)
 {
-	printf("Query: [start] [end] [numSteps] [funcId]\n");
+	//printf("Query: [start] [end] [numSteps] [funcId]\n");
 
 	//Read input numbers and place them in the given addresses:
 	size_t numRead = scanf("%lf %lf %zu %zu", start, end, numSteps, funcId);
@@ -66,8 +68,9 @@ bool getValidInput(double* start, double* end, size_t* numSteps, size_t* funcId)
 }
 
 void waitChild() {
-	wait(NULL);
-	numChildren--;
+    while (wait(NULL) && numChildren > 0) {
+		numChildren--;
+    }
 }
 
 int main(void)
@@ -81,24 +84,29 @@ int main(void)
 	signal(SIGCHLD, &waitChild);
 	
 	while (getValidInput(&rangeStart, &rangeEnd, &numSteps, &funcId)) {
+		fflush(stdin); // clears remaining chars from stdin buffer, fixes small concurrency issues
 		
-		numChildren++;
-
-		printf("Number of children: %d\n", numChildren);
-
+        numChildren++;
+		
 		if ((child_pid = fork()) < 0) {
 			perror("fork");
 			exit(1);
 		}
+		// in a child process
 		else if (child_pid == 0) {
 			double area = integrateTrap(FUNCS[funcId], rangeStart, rangeEnd, numSteps);
 			printf("The integral of function %zu in range %g to %g is %.10g\n", funcId, rangeStart, rangeEnd, area);
-		}
-
-		while (numChildren == MAX_CHILDREN) {
-			wait(NULL);
+			exit(0);
+		} 
+		// in the parent process
+		else {
+			while (numChildren >= MAX_CHILDREN) {
+				wait(NULL);
+			}
 		}
 	}
-
-	exit(0);
+	
+	// waits for all the children to finish before proceeding
+	while (wait(NULL) > 0){} 
+	return EXIT_SUCCESS;
 }
