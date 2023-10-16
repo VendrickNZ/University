@@ -32,12 +32,22 @@ double chargeDecay(double x)
 	}
 }
 
+#define NUM_THREADS 4
 #define NUM_FUNCS 3
 #define MAX_CHILDREN 6
 
 static MathFunc_t* const FUNCS[NUM_FUNCS] = {&sin, &gaussian, &chargeDecay};
 static int numChildren = 0;
 pthread_mutex_t numChildrenMutex = PTHREAD_MUTEX_INITIALIZER;
+
+struct threadArgs {
+    MathFunc_t* func;
+    double rangeStart;
+    double rangeEnd;
+    size_t numSteps;
+    double *totalSum;
+    pthread_mutex_t *mutex;
+};
 
 //Integrate using the trapezoid method. 
 double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_t numSteps)

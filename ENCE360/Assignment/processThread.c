@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <signal.h>
 #include <pthread.h>
 
 #ifndef M_PI
@@ -10,6 +14,7 @@
 #endif
 
 typedef double MathFunc_t(double);
+void waitChild();
 
 double gaussian(double x)
 {
@@ -42,7 +47,7 @@ struct threadArgs {
 
 
 //Integrate using the trapezoid method. 
-void* integrateTrap(void* args)
+double integrateTrap(void* args)
 {
     struct threadArgs* thread_args = (struct threadArgs*) args;
 	double rangeSize = thread_args->rangeEnd - thread_args->rangeStart;
@@ -55,13 +60,20 @@ void* integrateTrap(void* args)
 
 		area += ( thread_args->func(smallx) + thread_args->func(bigx) ); 
 	}
-    pthread_mutex_lock(thread_args->mutex);
     *(thread_args->totalSum) += (area * 0.5 * dx);
-    pthread_mutex_unlock(thread_args->mutex);
 
-	return NULL;
+	return (area * 0.5 * dx);
 }
 
+double handleIntegration(MathFunc_t* func, double rangeStart, double rangeEnd, size_t numSteps) {
+    double totalSum = 0;
+    pthread_t threads[NUM_THREADS];
+    struct threadArgs thread_args[NUM_THREADS];
+
+    // ... (rest of the logic to create threads, distribute work, and collect results)
+
+    return totalSum;
+}
 
 
 

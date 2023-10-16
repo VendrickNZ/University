@@ -41,10 +41,11 @@ double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_
 		double smallx = rangeStart + i*dx;
 		double bigx = rangeStart + (i+1)*dx;
 
-		area += dx * ( func(smallx) + func(bigx) ) / 2; //Would be more efficient to multiply area by dx once at the end. 
+		// added optimization by multiplying by dx (and 0.5) outside of for loop
+		area += ( func(smallx) + func(bigx) );
 	}
 
-	return area;
+	return area * dx * 0.5;
 }
 
 
