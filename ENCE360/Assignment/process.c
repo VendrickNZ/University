@@ -32,7 +32,6 @@ double chargeDecay(double x)
 	}
 }
 
-#define NUM_THREADS 4
 #define NUM_FUNCS 3
 #define MAX_CHILDREN 6
 
@@ -40,14 +39,6 @@ static MathFunc_t* const FUNCS[NUM_FUNCS] = {&sin, &gaussian, &chargeDecay};
 static int numChildren = 0;
 pthread_mutex_t numChildrenMutex = PTHREAD_MUTEX_INITIALIZER;
 
-struct threadArgs {
-    MathFunc_t* func;
-    double rangeStart;
-    double rangeEnd;
-    size_t numSteps;
-    double *totalSum;
-    pthread_mutex_t *mutex;
-};
 
 //Integrate using the trapezoid method. 
 double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_t numSteps)
@@ -81,6 +72,7 @@ void waitChild() {
     while (wait(NULL) && numChildren > 0) {
 		numChildren--;
     }
+	signal(SIGCHLD, waitChild);
 }
 
 int main(void)
@@ -91,13 +83,13 @@ int main(void)
 	size_t funcId;
 	pid_t child_pid = 0;
 
-	signal(SIGCHLD, &waitChild);
+	signal(SIGCHLD, waitChild);
 	
 	while (getValidInput(&rangeStart, &rangeEnd, &numSteps, &funcId)) {
 		fflush(stdin); // clears remaining chars from stdin buffer, fixes small concurrency issues
 		
         numChildren++;
-		
+
 		if ((child_pid = fork()) < 0) {
 			perror("fork");
 			exit(1);

@@ -29,7 +29,6 @@ double chargeDecay(double x)
 #define NUM_FUNCS 3
 static MathFunc_t* const FUNCS[NUM_FUNCS] = {&sin, &gaussian, &chargeDecay};
 
-
 //Integrate using the trapezoid method. 
 double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_t numSteps)
 {
@@ -48,12 +47,9 @@ double integrateTrap(MathFunc_t* func, double rangeStart, double rangeEnd, size_
 	return area * dx * 0.5;
 }
 
-
-
-
 bool getValidInput(double* start, double* end, size_t* numSteps, size_t* funcId)
 {
-	printf("Query: [start] [end] [numSteps] [funcId]\n");
+	// printf("Query: [start] [end] [numSteps] [funcId]\n");
 
 	//Read input numbers and place them in the given addresses:
 	size_t numRead = scanf("%lf %lf %zu %zu", start, end, numSteps, funcId);
@@ -61,8 +57,6 @@ bool getValidInput(double* start, double* end, size_t* numSteps, size_t* funcId)
 	//Return whether the given range is valid:
 	return (numRead == 4 && *end >= *start && *numSteps > 0 && *funcId < NUM_FUNCS);
 }
-
-
 
 int main(void)
 {
@@ -76,6 +70,5 @@ int main(void)
 
 		printf("The integral of function %zu in range %g to %g is %.10g\n", funcId, rangeStart, rangeEnd, area);
 	}
-
 	exit(0);
 }
