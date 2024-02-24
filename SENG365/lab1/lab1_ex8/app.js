@@ -73,26 +73,6 @@ app.put('/users/:id/follow', (req, res) => {
     res.status(200).send(user);
 });
 
-//incorrect?
-app.delete('/users/:id/unfollow', (req, res) => {
-    const userId = parseInt(req.params.id, 10);
-    const targetUserId = parseInt(req.body.targetUserId, 10);
-
-    const user = users.find(user => user.id === userId);
-    const targetUser = users.find(user => user.id === targetUserId);
-
-    if (!user || !targetUser) {
-        return res.status(404).send('User not found');
-    }
-
-    if (user.following.includes(targetUser)) {
-        user.following.delete(targetUserId);
-    }
-
-    res.status(200).send(user);
-})
-
-// correct?
 app.delete('/users/:id/unfollow', (req, res) => {
     const userId = parseInt(req.params.id, 10);
     const targetUserId = parseInt(req.body.targetUserId, 10);
