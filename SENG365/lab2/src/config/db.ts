@@ -9,7 +9,7 @@ const state = {
 };
 
 const connect = async (): Promise<void> => {
-    state.pool = await.mysql.createPool( {
+    state.pool = await mysql.createPool( {
         host: process.env.SENG365_MYSQL_HOST,
         user: process.env.SENG365_MYSQL_USER,
         password: process.env.SENG365_MYSQL_PASSWORD,
@@ -18,6 +18,11 @@ const connect = async (): Promise<void> => {
     await state.pool.getConnection();
     Logger.info('Successfully connected to database')
     return
-}
+};
 
+const getPool = () => {
+    return state.pool;
+};
+
+export {connect, getPool}
 
