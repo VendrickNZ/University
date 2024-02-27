@@ -12,5 +12,6 @@ export default () => {
 
     app.use(bodyParser.json());
     require('../app/routes/user.server.routes.js')(app);
+    require('../app/routes/conversation.server.routes')(app);
     return app;
 };
