@@ -20,20 +20,20 @@ const getOne = async (id: number): Promise<Conversation[]> => {
     return rows;
 }
 
-const insert = async (convo_name: string): Promise<ResultSetHeader> => {
-    Logger.info(`Adding conversation ${convo_name} to the database`);
+const insert = async (convoName: string): Promise<ResultSetHeader> => {
+    Logger.info(`Adding conversation ${convoName} to the database`);
     const conn = await getPool().getConnection();
-    const query = 'insert into lab2_conversations (convo_id) values ( ? )';
-    const [ result ] = await conn.query(query, [convo_name]);
+    const query = 'INSERT INTO lab2_conversations (convo_name) VALUES (?)';
+    const [result] = await conn.query(query, [convoName]);
     await conn.release();
     return result;
 }
 
-const alter = async (id: number, convo_name: string): Promise<ResultSetHeader> => {
+const alter = async (id: number, convoName: string): Promise<ResultSetHeader> => {
     Logger.info(`Altering user ${id} in the database`);
     const conn = await getPool().getConnection();
     const query = 'UPDATE lab2_conversations SET convo_name = ? WHERE convo_id = ?';
-    const [ result ] = await conn.query(query, [convo_name, id]);
+    const [ result ] = await conn.query(query, [convoName, id]);
     await conn.release();
     return result;
 }

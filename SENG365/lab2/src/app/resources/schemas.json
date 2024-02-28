@@ -12,5 +12,34 @@
       "username"
     ],
     "additionalProperties": false
+  },
+  "conversation": {
+    "type": "object",
+    "properties": {
+      "convo_name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    "required": [
+      "convo_name"
+    ],
+    "additionalProperties": false
+  },
+  "message_creation": {
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "required": [
+      "message"
+    ],
+    "additionalProperties": false
   }
 }
+
