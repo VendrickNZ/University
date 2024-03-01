@@ -8,9 +8,7 @@
         "maxLength": 64
       }
     },
-    "required": [
-      "username"
-    ],
+    "required": ["username"],
     "additionalProperties": false
   },
   "conversation": {
@@ -22,9 +20,7 @@
         "maxLength": 64
       }
     },
-    "required": [
-      "convo_name"
-    ],
+    "required": ["convo_name"],
     "additionalProperties": false
   },
   "message_creation": {
@@ -34,12 +30,12 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 256
+      },
+      "user_id": {
+        "type": "integer"
       }
     },
-    "required": [
-      "message"
-    ],
+    "required": ["message", "user_id"],
     "additionalProperties": false
   }
 }
-

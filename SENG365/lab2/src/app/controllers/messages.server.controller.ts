@@ -3,7 +3,6 @@ import * as schemas from '../resources/schemas.json'
 import Logger from '../../config/logger';
 import {Request, Response} from 'express';
 import {validate} from "../resources/validate";
-import * as users from "../models/user.server.model";
 
 const list = async (req: Request, res: Response): Promise<void> => {
     Logger.http('GET all messages')
@@ -18,6 +17,8 @@ const list = async (req: Request, res: Response): Promise<void> => {
 
 const create = async (req: Request, res: Response): Promise<void> => {
     Logger.http(`POST create a message with message: ${req.body.message}`)
+    Logger.http(`POST create a userId with ID: ${req.body.user_id}`)
+
     const validation = await validate(
         schemas.message_creation,
         req.body);
@@ -27,9 +28,12 @@ const create = async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    const { message, convo_id, user_id } = req.body;
+    const convoId = req.params.id;
+    const userId = req.body.user_id;
+    const message = req.body.message;
+
     try {
-        const result = await messages.insert(message, convo_id, user_id);
+        const result = await messages.insert(message, parseInt(convoId, 10), userId);
         res.status(201).send({"message_id": result.insertId});
     } catch (err) {
         res.status(500).send(`ERROR creating user ${message}: ${err}`);

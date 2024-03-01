@@ -12,7 +12,7 @@ export default () => {
 
     app.use(bodyParser.json());
     require('../app/routes/user.server.routes.js')(app);
-    require('../app/routes/conversation.server.routes')(app);
-    require('../app/routes/messages.server.routes')(app);
+    require('../app/routes/conversation.server.routes.js')(app);
+    require('../app/routes/messages.server.routes.js')(app);
     return app;
 };
