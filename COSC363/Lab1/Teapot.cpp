@@ -61,7 +61,14 @@ void display(void)
 
     glEnable(GL_LIGHTING);          //Enable lighting when drawing the teapot
     glColor3f(0.0, 1.0, 1.0);
-    glutSolidTeapot(1);
+   // glutSolidTeapot(1);
+
+    glPushMatrix();
+        glRotatef(-45.0, 0., 0., 1.);
+
+        glTranslatef(0.0, 3.0, 0.0);
+        glutSolidTeapot(1);
+    glPopMatrix();
 
     glFlush();
 }
@@ -94,7 +101,7 @@ int main(int argc, char **argv)
     initialize();
     glutDisplayFunc(display);
     glutSpecialFunc(special);
-    glutTimerFunc(50, myTimer, 0);
+    //glutTimerFunc(50, myTimer, 0);
     glutMainLoop();
     return 0;
 }

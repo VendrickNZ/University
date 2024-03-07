@@ -165,6 +165,16 @@ void drawCannonBall()
     glPopMatrix();
 }
 
+void fireCannonBall()
+{
+    if (isFired)
+    {
+        ballPosX += ballVelocityX * 0.1;
+        ballPosY += ballVelocityY * 0.1;
+        ballVelocityY += gravity * 0.1;
+    }
+}
+
 //--Display: ----------------------------------------------------------------------
 //--This is the main display module containing function calls for generating
 //--the scene.
@@ -198,7 +208,10 @@ void display()
 
     drawCannonBall();
 
+    fireCannonBall();
+
     glFlush();
+    glutPostRedisplay();
 }
 
 //------- Initialize OpenGL parameters -----------------------------------
@@ -238,8 +251,8 @@ void keyboard(unsigned char key, int x, int y)
     if (key == ' ')
     {
         isFired = true;
-        ballVelocityX = cos(angle * M_PI / 180) * 20;
-        ballVelocityY = sin(angle * M_PI / 180) * 20;
+        ballVelocityX = cos(angle * M_PI / 180) * 5;
+        ballVelocityY = sin(angle * M_PI / 180) * 5;
     }
 }
 //  ------- Main: Initialize glut window and register call backs -----------
