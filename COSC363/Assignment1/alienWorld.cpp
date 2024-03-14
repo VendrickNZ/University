@@ -5,6 +5,8 @@
 #include <cmath>
 using namespace std;
 
+float camX = 0, camY = 5, camZ = 0;
+float angle = 0;
 
 void drawFloor()
 {
@@ -29,10 +31,14 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(0, 5, 0, 0, 6, -1, 0, 1, 0);
+    float lx = sin((angle / 180) * M_PI);
+    float lz = -cos((angle / 180) * M_PI);
+
+    gluLookAt(camX, camY, camZ, camX + lx, camY, camZ + lz, 0, 1, 0);
 
     glLightfv(GL_LIGHT0, GL_POSITION, lpos);
 
+    glRotatef(angle, 0.0, 1.0, 0.0);
     glDisable(GL_LIGHTING);
     drawFloor();
 
@@ -56,10 +62,33 @@ void initialize()
     gluPerspective(50, 1, 10.0, 1000.0);
 }
 
-void special(int key, int x, int y)
-{
+void special(int key, int x, int y) {
+    float angleRadians = (angle / 180) * M_PI;
+    float forwardX = sin(angleRadians);
+    float forwardZ = -cos(angleRadians);
 
+    switch (key) {
+        case GLUT_KEY_LEFT:
+            angle -= 5.0;
+            break;
+        case GLUT_KEY_RIGHT:
+            angle += 5.0;
+            break;
+        case GLUT_KEY_UP:
+            camX += forwardX;
+            camZ += forwardZ;
+            break;
+        case GLUT_KEY_DOWN:
+            camX -= forwardX;
+            camZ -= forwardZ;
+            break;
+    }
+    if (angle > 360) angle -= 360;
+    if (angle < 0) angle += 360;
+
+    glutPostRedisplay();
 }
+
 
 void keyboard(unsigned char key, int x, int y)
 {
