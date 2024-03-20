@@ -7,6 +7,10 @@ using namespace std;
 
 float camX = 0, camY = 5, camZ = 0;
 float angle = 0;
+float lightDirection[4] = {0.5, -1.0, 0.0, 0.0};
+float ambientLight[4] = {0.2, 0.2, 0.2, 1.0};
+float diffuseLight[4] = {1.0, 1.0, 0.8, 1.0};
+float specularLight[4] = {1.0, 1.0, 1.0, 1.0};
 
 void drawFloor()
 {
@@ -43,6 +47,13 @@ void display()
     drawFloor();
 
     glEnable(GL_LIGHTING);
+    glColor3f(0.0, 1.0, 1.0);
+
+    glPushMatrix();
+        glRotatef(-45.0, 0., 0., 1.);
+        glTranslatef(0.0, 3.0, 0.0);
+        glutSolidTeapot(1);
+    glPopMatrix();
 
     glFlush();
 }
@@ -56,6 +67,12 @@ void initialize()
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, lightDirection);
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+    //glClearColor (0, 0, 0, 1);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
